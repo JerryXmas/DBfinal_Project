@@ -1,0 +1,41 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Location :</h2>
+        <table class='table table-striped'>
+          <tr>
+	          <th>Location Name</th>
+	          <th>Address</th>
+	          <th>Location Hectare</th>
+	          <th>FruitCrop</th>
+	          <th>Grow Hectare</th>
+	          <th>Edit</th>
+	      </tr>
+	      {% for location in locations %}
+	      <tr>
+	      	<td>{{ location.name }}</td>
+	      	<td>{{ location.address }}</td>
+	      	<td>{{ location.hectare }}</td>
+	      	<td></td>
+	      	<td></td>
+	      	<td><a href="{{ url_for('updateLocation', locationId=location.id) }}">Update Location</a><br /><a href="{{ url_for('deleteLocation', locationId=location.id) }}">Delete Location</a></td>
+	      </tr>
+	      {% for grow in location.growList %}
+	      <tr>
+	      	<td></td>
+	      	<td></td>
+	      	<td></td>
+	      	<td>{{ grow.FC.name }}</td>
+	      	<td>{{ grow.hectare }}</td>
+	      	<td></td>
+	      </tr>
+	      {% endfor %}
+	      {% endfor %}
+        </table>
+        <hr />
+        <a href="{{ url_for('addLocation') }}">Add Location</a>
+      </div>
+    </div> 
+  {% endblock content %}

@@ -1,0 +1,21 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Update Location : </h2>
+        <form class="form-inline" action="{{ url_for('updateLocation', locationId=location.id) }}" method="POST">
+          Location Name :
+          <input class="form-control" type="text" name="locationName" value="{{ location.name }}" />
+          <br />
+          Address :
+          <input class="form-control" type="text" name="address" value="{{ location.address }}" />
+          <br />
+          Hectare :
+          <input class="form-control" type="text" name="hectare" value="{{ location.hectare }}" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

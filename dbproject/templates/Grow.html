@@ -1,0 +1,29 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Grow :</h2>
+        <a href="{{ url_for('addGrow') }}">Add Grow</a>
+        <hr />
+        <table class='table table-striped'>
+        	<tr>
+	          <th>FruitCrop</th>
+	          <th>Grow At</th>
+	          <th>Date</th>
+	          <th>Hectare</th>
+	          <th>Edit</th>
+	      	</tr>
+	      	{% for grow in growList %}
+	      	<tr>
+	      	  <td>{{ grow.FC.name }}</td>
+	      	  <td>{{ locationHandler.getLocationById(accountId, grow.L_Id).name }}</td>
+	      	  <td>{{ grow.date }}</td>
+	      	  <td>{{ grow.hectare }}</td>
+	      	  <td></td>
+	      	</tr>
+	      	{% endfor %}
+        </table>
+      </div>
+    </div> 
+  {% endblock content %}

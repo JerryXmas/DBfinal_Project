@@ -1,0 +1,31 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Add Grow : </h2>
+        <form class="form-inline" action="{{ url_for('addGrow') }}" method="POST">
+          Grow
+          <select name="FC_Id">
+              {% for fc in FCList %}
+              <option value="{{ fc.FC_Id }}">{{ fc.name }}</option>
+              {% endfor %}
+          </select>
+          At
+          <select name="locationId">
+              {% for location in locations %}
+              <option value="{{ location.id }}">{{ location.name }}</option>
+              {% endfor %}
+          </select>
+          <br />
+          Date :
+          <input class="form-control" type="date" name="date" />
+          <br />
+          Hectare :
+          <input class="form-control" type="text" name="hectare" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}
