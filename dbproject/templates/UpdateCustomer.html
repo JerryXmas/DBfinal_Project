@@ -1,0 +1,24 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Update Customer : </h2>
+        <form class="form-inline" action="{{ url_for('updateCustomer', C_Id=c.id) }}" method="POST">
+          Customer Name :
+          <input class="form-control" type="text" name="name" value="{{ c.name }}" />
+          <br />
+          Phone :
+          <input class="form-control" type="text" name="phone" value="{{ c.phone }}" />
+          <br />
+          Address :
+          <input class="form-control" type="text" name="address" value="{{ c.address }}" />
+          <br />
+          E-mail :
+          <input class="form-control" type="text" name="e_mail" value="{{ c.e_mail }}" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

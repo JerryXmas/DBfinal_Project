@@ -1,0 +1,21 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Update Fruit/Crop : </h2>
+        <form class="form-inline" action="{{ url_for('updateFC', FC_Id=fc.FC_Id) }}" method="POST">
+          Fruit/Crop Name :
+          <input class="form-control" type="text" name="fcName" value="{{ fc.name }}" />
+          <br />
+          Season :
+          <input class="form-control" type="text" name="season" value="{{ fc.season }}" />
+          <br />
+          GrowthDrution :
+          <input class="form-control" type="text" name="growthDution" value="{{ fc.growthDrution }}" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

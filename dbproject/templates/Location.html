@@ -4,6 +4,8 @@
     <div class="container">
       <div class="jumbotron">
         <h2>Location :</h2>
+        <a href="{{ url_for('addLocation') }}">Add Location</a>
+        <hr />
         <table class='table table-striped'>
           <tr>
 	          <th>Location Name</th>
@@ -35,7 +37,7 @@
 	      {% endfor %}
         </table>
         <hr />
-        <a href="{{ url_for('addLocation') }}">Add Location</a>
+        
       </div>
     </div> 
   {% endblock content %}

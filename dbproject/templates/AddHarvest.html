@@ -1,0 +1,34 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Add Harvest : </h2>
+        <form class="form-inline" action="{{ url_for('addHarvest') }}" method="POST">
+          Harvest
+          <select name="FC_Id">
+              {% for fc in FCList %}
+              <option value="{{ fc.FC_Id }}">{{ fc.name }}</option>
+              {% endfor %}
+          </select>
+          From
+          <select name="locationId">
+              {% for location in locations %}
+              <option value="{{ location.id }}">{{ location.name }}</option>
+              {% endfor %}
+          </select>
+          <br />
+          Date :
+          <input class="form-control" type="date" name="date" />
+          <br />
+          TGs :
+          <input class="form-control" type="text" name="catty" />
+          <br />
+          Pack Cost ($) :
+          <input class="form-control" type="text" name="pack_cost" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

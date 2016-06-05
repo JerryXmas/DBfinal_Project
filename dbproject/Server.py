@@ -79,14 +79,14 @@ def register():
         return resp
         
 #---------------------------------Location-------------------------------------
-@app.route('/Location')
+@app.route('/View/Location')
 def location():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
     locations = locationHandler.selectAllLocations(account.accountId)
     
     data = {"title": "Location",
-            "Location": active,
+            "View": active,
             "hasLogIn": True,
             "userName": "Hello " + account.userName,
             "locations": locations,
@@ -94,13 +94,13 @@ def location():
     return render_template("Location.html", **data)
 
 #####-----------------------------add------------------------------------------
-@app.route('/Location/AddLocation', methods=["GET", "POST"])
+@app.route('/View/Location/AddLocation', methods=["GET", "POST"])
 def addLocation():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
     if request.method == "GET":
         data = {"title": "AddLocation",
-                "Location": active,
+                "View": active,
                 "hasLogIn": True,
                 "userName": "Hello " + account.userName,
                 }
@@ -113,7 +113,7 @@ def addLocation():
         return redirect(url_for('location'))
         
 #####------------------------------update--------------------------------------
-@app.route('/Location/UpdateLocation/<int:locationId>', methods=["GET", "POST"])
+@app.route('/View/Location/UpdateLocation/<int:locationId>', methods=["GET", "POST"])
 def updateLocation(locationId):
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
@@ -125,7 +125,7 @@ def updateLocation(locationId):
             
     if request.method == "GET":
         data = {"title": "UpdateLocation",
-                "Location": active,
+                "View": active,
                 "hasLogIn": True,
                 "userName": "Hello " + account.userName,
                 "location": location,
@@ -138,7 +138,7 @@ def updateLocation(locationId):
         return redirect(url_for('location'))
     
 #####--------------------------------delete------------------------------------
-@app.route('/Location/DeleteLocation/<int:locationId>', methods=["GET", "POST"])
+@app.route('/View/Location/DeleteLocation/<int:locationId>', methods=["GET", "POST"])
 def deleteLocation(locationId):
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
@@ -150,7 +150,7 @@ def deleteLocation(locationId):
             
     if request.method == "GET":
         data = {"title": "DeleteLocation",
-                "Location": active,
+                "View": active,
                 "hasLogIn": True,
                 "userName": "Hello " + account.userName,
                 "location": location,
@@ -162,7 +162,7 @@ def deleteLocation(locationId):
         return redirect(url_for('location'))
         
 #---------------------------------Grow-----------------------------------------
-@app.route('/Operation/Grow', methods=["GET", "POST"])
+@app.route('/Operation/Grow')
 def grow():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
@@ -202,7 +202,238 @@ def addGrow():
         hectare = int(request.form['hectare'])
         locationHandler.insertGrow(locationId, FC_Id, date, hectare)
         return redirect(url_for('grow'))
+        
+#----------------------------------Harvest-------------------------------------
+@app.route('/Operation/Harvest')
+def harvest():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    harvestList = locationHandler.selectAllHarvest(account.accountId)
+    data = {"title": "Harvest",
+            "Operation": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "harvestList": harvestList,
+            }
+    return render_template("Harvest.html", **data)
     
+#####--------------------------------add---------------------------------------
+@app.route('/Operation/Harvest/AddHarvest', methods=["GET", "POST"])
+def addHarvest():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    locations = locationHandler.selectAllLocations(account.accountId)
+    FCList = locationHandler.selectAllFC()
+    if request.method == "GET":
+        data = {"title": "AddHarvest",
+            "Operation": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "locations": locations,
+            "FCList": FCList,
+            }
+        return render_template("AddHarvest.html", **data)
+    elif request.method == "POST":
+        locationId = int(request.form['locationId'])
+        FC_Id = int(request.form['FC_Id'])
+        date = request.form['date']
+        catty = int(request.form['catty'])
+        pack_cost = int(request.form['pack_cost'])
+        locationHandler.insertHarvest(locationId, FC_Id, date, catty, pack_cost)
+        return redirect(url_for('harvest'))  
+
+#------------------------------------Sale--------------------------------------
+@app.route('/Operation/Sale')
+def sale():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    transportList = locationHandler.selectAllTransport(account.accountId)
+    data = {"title": "Sale",
+            "Operation": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "transportList": transportList,
+            }
+    return render_template("Sale.html", **data) 
+
+#####---------------------------------add--------------------------------------
+@app.route('/Operation/Sale/AddSale', methods=["GET", "POST"])
+def addSale():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    FCList = locationHandler.selectAllFC()
+    customerList = locationHandler.selectAllCustomer()
+    if request.method == "GET":
+        data = {"title": "AddSale",
+            "Operation": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "FCList": FCList,
+            "customerList": customerList,
+            }
+        return render_template("AddSale.html", **data)
+    elif request.method == "POST":
+        customerId = int(request.form['customerId'])
+        FC_Id = int(request.form['FC_Id'])
+        date = request.form['date']
+        catty = int(request.form['catty'])
+        income = int(request.form['income'])
+        cost = int(request.form['cost'])
+        locationHandler.insertTransport(account.accountId , FC_Id, customerId, date, catty, income, cost)
+        return redirect(url_for('sale')) 
+
+#------------------------------------FC----------------------------------------
+@app.route('/View/FruitCrop')
+def fruitCrop():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    FCList = locationHandler.selectAllFC()
+    
+    data = {"title": "FruitCrop",
+            "View": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "FCList": FCList,
+            }
+    return render_template("FruitCrop.html", **data) 
+
+#####--------------------------------add---------------------------------------
+@app.route('/View/FruitCrop/AddFruitCrop', methods=["GET", "POST"])
+def addFC():    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "AddFruitCrop",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                }
+        return render_template("AddFruitCrop.html", **data)
+    elif request.method == "POST":
+        fcName = request.form['fcName']
+        season = request.form['season']
+        growthDution = request.form['growthDution']
+        locationHandler.insertFC(fcName, season, growthDution)
+        return redirect(url_for('fruitCrop'))
+        
+#####-------------------------------update--------------------------------------
+@app.route('/View/FruitCrop/UpdateFruitCrop/<int:FC_Id>', methods=["GET", "POST"])
+def updateFC(FC_Id):    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        fc = locationHandler.getFCById(FC_Id)
+        data = {"title": "UpdateFruitCrop",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "fc": fc,
+                }
+        return render_template("UpdateFruitCrop.html", **data)
+    elif request.method == "POST":
+        fcName = request.form['fcName']
+        locationHandler.updateFC(FC_Id, "Name", fcName)
+        season = request.form['season']
+        locationHandler.updateFC(FC_Id, "Season", season)
+        growthDution = request.form['growthDution']
+        locationHandler.updateFC(FC_Id, "GrowthDrution", growthDution)
+        return redirect(url_for('fruitCrop'))
+        
+#####---------------------------------delete-----------------------------------
+@app.route('/View/FruitCrop/DeleteFruitCrop/<int:FC_Id>', methods=["GET", "POST"])
+def deleteFC(FC_Id):
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "DeleteFruitCrop",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "FC_Id": FC_Id,
+                }
+        return render_template("DeleteFruitCrop.html", **data)
+    elif request.method == "POST":
+        if request.form['choose'] == 'yes':
+            locationHandler.deleteFC(FC_Id)
+        return redirect(url_for('fruitCrop'))
+        
+#------------------------------------Customer---------------------------------
+@app.route('/View/Customer')
+def customer():
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    customerList = locationHandler.selectAllCustomer()
+    
+    data = {"title": "Customer",
+            "View": active,
+            "hasLogIn": True,
+            "userName": "Hello " + account.userName,
+            "customerList": customerList,
+            }
+    return render_template("Customer.html", **data) 
+    
+#####--------------------------------add---------------------------------------
+@app.route('/View/Customer/AddCustomer', methods=["GET", "POST"])
+def addCustomer():    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "AddCustomer",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                }
+        return render_template("AddCustomer.html", **data)
+    elif request.method == "POST":
+        name = request.form['name']
+        phone = request.form['phone']
+        address = request.form['address']
+        e_mail = request.form['e_mail']
+        locationHandler.insertCustomer(name, phone, address, e_mail)
+        return redirect(url_for('customer'))
+        
+#####-------------------------------update--------------------------------------
+@app.route('/View/Customer/UpdateCustomer/<int:C_Id>', methods=["GET", "POST"])
+def updateCustomer(C_Id):    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        c = locationHandler.getCustomerById(C_Id)
+        data = {"title": "UpdateCustomer",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "c": c,
+                }
+        return render_template("UpdateCustomer.html", **data)
+    elif request.method == "POST":
+        name = request.form['name']
+        locationHandler.updateCustomer(C_Id, "Name", name)
+        phone = request.form['phone']
+        locationHandler.updateCustomer(C_Id, "Phone", phone)
+        address = request.form['address']
+        locationHandler.updateCustomer(C_Id, "Address", address)
+        e_mail = request.form['e_mail']
+        locationHandler.updateCustomer(C_Id, "E_mail", e_mail)
+        return redirect(url_for('customer'))
+        
+#####---------------------------------delete-----------------------------------
+@app.route('/View/Customer/DeleteCustomer/<int:C_Id>', methods=["GET", "POST"])
+def deleteCustomer(C_Id):
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "DeleteCustomer",
+                "View": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "C_Id": C_Id,
+                }
+        return render_template("DeleteCustomer.html", **data)
+    elif request.method == "POST":
+        if request.form['choose'] == 'yes':
+            locationHandler.deleteCustomer(C_Id)
+        return redirect(url_for('customer'))
     
 #-------------------------------------MAIN-------------------------------------
 if __name__ == '__main__':

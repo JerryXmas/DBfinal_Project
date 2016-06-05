@@ -26,17 +26,25 @@
           <ul class="nav navbar-nav">
             <li {{ Home }}><a href="{{ url_for('homePage') }}">Home</a></li>
             {% if hasLogIn %}
-            <li {{ Location }}><a href="{{ url_for('location') }}">Location</a></li>
+            <li class="dropdown {{ View }}">
+                 <a data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('location') }}">Location</a></li>
+                    <li><a href="{{ url_for('fruitCrop') }}">Fruit/Crop</a></li>
+                    <li><a href="{{ url_for('customer') }}">Customer</a></li>
+                  </ul>
+            </li>
 
             <li class="dropdown {{ Operation }}">
                  <a data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operation<span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="{{ url_for('grow') }}">Grow</a></li>
+                    <li><a href="{{ url_for('harvest') }}">Harvest</a></li>
+                    <li><a href="{{ url_for('sale') }}">Sale</a></li>
                   </ul>
             </li>
 
-            <li {{ Inventary }}><a href="{{ url_for('homePage') }}">Inventary</a></li>
-            <li {{ Sale }}><a href="{{ url_for('homePage') }}">Sale</a></li>
+            
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">

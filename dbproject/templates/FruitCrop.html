@@ -1,0 +1,29 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Fruit/Crop :</h2>
+        <a href="{{ url_for('addFC') }}">Add Fruit/Crop</a>
+        <hr />
+        <table class='table table-striped'>
+          <tr>
+	          <th>Fruit/Crop Name</th>
+	          <th>Season</th>
+	          <th>GrowthDrution</th>
+	          <th>Edit</th>
+	      </tr>
+	      {% for fc in FCList %}
+	      <tr>
+	      	<td>{{ fc.name }}</td>
+	      	<td>{{ fc.season }}</td>
+	      	<td>{{ fc.growthDrution }}</td>
+	      	<td><a href="{{ url_for('updateFC', FC_Id=fc.FC_Id) }}">Update Fruit/Crop</a><br /><a href="{{ url_for('deleteFC', FC_Id=fc.FC_Id) }}">Delete Fruit/Crop</a></td>
+	      </tr>
+	      {% endfor %}
+        </table>
+        <hr />
+        
+      </div>
+    </div> 
+  {% endblock content %}

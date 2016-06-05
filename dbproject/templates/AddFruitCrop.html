@@ -1,0 +1,21 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Add Fruit/Crop : </h2>
+        <form class="form-inline" action="{{ url_for('addFC') }}" method="POST">
+          Fruit/Crop Name :
+          <input class="form-control" type="text" name="fcName" />
+          <br />
+          Season :
+          <input class="form-control" type="text" name="season" />
+          <br />
+          GrowthDution :
+          <input class="form-control" type="text" name="growthDution" />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

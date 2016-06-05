@@ -1,0 +1,31 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Harvest :</h2>
+        <a href="{{ url_for('addHarvest') }}">Add Harvest</a>
+        <hr />
+        <table class='table table-striped'>
+        	<tr>
+	          <th>FruitCrop</th>
+	          <th>Harvest From</th>
+	          <th>Date</th>
+	          <th>TG</th>
+	          <th>Pack Cost</th>
+	          <th>Edit</th>
+	      	</tr>
+	      	{% for harvest in harvestList %}
+	      	<tr>
+	      	  <td>{{ harvest.FC.name }}</td>
+	      	  <td>{{ harvest.location.name }}</td>
+	      	  <td>{{ harvest.date }}</td>
+	      	  <td>{{ harvest.catty }} TGs</td>
+	      	  <td>{{ harvest.pack_cost }} $</td>
+	      	  <td></td>
+	      	</tr>
+	      	{% endfor %}
+        </table>
+      </div>
+    </div> 
+  {% endblock content %}

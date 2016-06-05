@@ -1,0 +1,33 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Sale :</h2>
+        <a href="{{ url_for('addSale') }}">Add Sale</a>
+        <hr />
+        <table class='table table-striped'>
+        	<tr>
+	          <th>FruitCrop</th>
+	          <th>Sale to</th>
+	          <th>Date</th>
+	          <th>TG</th>
+	          <th>Income</th>
+	          <th>Transport Cost</th>
+	          <th>Edit</th>
+	      	</tr>
+	      	{% for transport in transportList %}
+	      	<tr>
+	      	  <td>{{ transport.FC.name }}</td>
+	      	  <td>{{ transport.customer.name }}</td>
+	      	  <td>{{ transport.date }}</td>
+	      	  <td>{{ transport.catty }} TGs</td>
+	      	  <td>{{ transport.income }} $</td>
+	      	  <td>{{ transport.cost }} $</td>
+	      	  <td></td>
+	      	</tr>
+	      	{% endfor %}
+        </table>
+      </div>
+    </div> 
+  {% endblock content %}

@@ -1,0 +1,13 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+  <div class="container">
+    <div class="jumbotron">
+    	<h3>Do you want to dalete the Customer data ?</h3>
+    	<form class="form-inline" action="{{ url_for('deleteCustomer', C_Id=C_Id) }}" method="POST">
+    		<input class="btn btn-default" type="submit" name="choose" value="yes" />
+    		<input class="btn btn-default" type="submit" name="choose" value="no" />
+    	</form>
+    </div>
+  </div>
+  {% endblock content %}
