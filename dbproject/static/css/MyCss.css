@@ -1,5 +1,9 @@
 body{
-	background-image: url("http://ndl.mgccw.com/mu3/wallpaper/20140608/11/1402205485337/2000x1330-IMAGES--6-.jpg")
+	background-image: url("../image/2.jpg");
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
 }
 #table1, #table2{
 	background-color: rgb(255, 255, 255);

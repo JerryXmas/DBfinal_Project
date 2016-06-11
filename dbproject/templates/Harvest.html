@@ -29,7 +29,7 @@
 	      	  <td>{{ harvest.date }}</td>
 	      	  <td>{{ harvest.catty }} TGs</td>
 	      	  <td>{{ harvest.pack_cost }} $</td>
-	      	  <td></td>
+	      	  <td><a href="{{ url_for('updateHarvest', H_Id = harvest.Id) }}">Update Harvest</a><br /><a href="{{ url_for('deleteHarvest', H_Id = harvest.Id) }}">Delete Harvest</a></td>
 	      	</tr>
 	      	{% endfor %}
         </table>

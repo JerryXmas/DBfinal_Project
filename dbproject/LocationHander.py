@@ -339,3 +339,65 @@ class LocationHander(object):
         transportCursor.close()
         conn.close()
         return sumData
+        
+    def getHarvestById(self, accountId, H_Id):
+        harvestList = self.selectAllHarvest(accountId)
+        for h in harvestList:
+            if h.Id == H_Id:
+                return h
+                
+    def getTransportById(self, accountId, T_Id):
+        transportList = self.selectAllTransport(accountId)
+        for t in transportList:
+            if t.id == T_Id:
+                return t
+                
+    def updateHarvest(self, H_Id, data, changeto):
+        conn = sqlite3.connect(self.dbName)
+        harvestCursor = conn.cursor()
+        if data == "Date":
+            harvestCursor.execute(
+                "update Harvest set %s = '%s' where Id = %d;" % (data, changeto, H_Id)
+            )
+        else:
+            harvestCursor.execute(
+                "update Harvest set %s = %d where Id = %d;" % (data, changeto, H_Id)
+            )
+        conn.commit()
+        harvestCursor.close()
+        conn.close()
+        
+    def updateTransport(self, T_Id, data, changeto):
+        conn = sqlite3.connect(self.dbName)
+        transportCursor = conn.cursor()
+        if data == "Date":
+            transportCursor.execute(
+                "update Transport set %s = '%s' where Id = %d;" % (data, changeto, T_Id)
+            )
+        else:
+            transportCursor.execute(
+                "update Transport set %s = %d where Id = %d;" % (data, changeto, T_Id)
+            )
+        conn.commit()
+        transportCursor.close()
+        conn.close()
+        
+    def deleteHarvest(self, H_Id):
+        conn = sqlite3.connect(self.dbName)
+        harvestCursor = conn.cursor()
+        harvestCursor.execute(
+            "delete from Harvest where Id = %d;" % H_Id
+        )
+        conn.commit()
+        harvestCursor.close()
+        conn.close()
+        
+    def deleteTransport(self, T_Id):
+        conn = sqlite3.connect(self.dbName)
+        transportCursor = conn.cursor()
+        transportCursor.execute(
+            "delete from Transport where Id = %d;" % T_Id
+        )
+        conn.commit()
+        transportCursor.close()
+        conn.close()

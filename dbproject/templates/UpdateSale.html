@@ -1,0 +1,39 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Update Sale : </h2>
+        <form class="form-inline" action="{{ url_for('updateSale', T_Id = sale.id) }}" method="POST">
+          Sale
+          <select class="form-control" name="FC_Id">
+              {% for fc in FCList %}
+              <option value="{{ fc.FC_Id }}" {% if fc.FC_Id == sale.FC.FC_Id %}selected{% endif %}>{{ fc.name }}</option>
+              {% endfor %}
+          </select>
+          To
+          <select class="form-control" name="customerId">
+              {% for customer in customerList %}
+              <option value="{{ customer.id }}" {% if customer.id == sale.customer.id %}selected{% endif %}>{{ customer.name }}</option>
+              {% endfor %}
+          </select>
+          <br />
+          <br />
+          Date :
+          <input class="form-control" type="date" name="date" value="{{ sale.date }}" />
+          <br />
+          TGs :
+          <input class="form-control" type="text" name="catty" value="{{ sale.catty }}" />
+          <br />
+          Income ($) :
+          <input class="form-control" type="text" name="income" value="{{ sale.income }}" />
+          <br />
+          Transport Cost ($) :
+          <input class="form-control" type="text" name="cost" value="{{ sale.cost }}" />
+          <br />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

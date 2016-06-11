@@ -280,7 +280,56 @@ def addHarvest():
         catty = int(request.form['catty'])
         pack_cost = int(request.form['pack_cost'])
         locationHandler.insertHarvest(locationId, FC_Id, date, catty, pack_cost)
-        return redirect(url_for('harvest'))  
+        return redirect(url_for('harvest'))
+
+#####-------------------------------update--------------------------------------
+@app.route('/Operation/Harvest/UpdateHarvest/<int:H_Id>', methods=["GET", "POST"])
+def updateHarvest(H_Id):    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        locations = locationHandler.selectAllLocations(account.accountId)
+        FCList = locationHandler.selectAllFC()
+        harvest = locationHandler.getHarvestById(account.accountId, H_Id)
+        data = {"title": "UpdateHarvest",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "harvest": harvest,
+                "locations": locations,
+                "FCList": FCList,
+                }
+        return render_template("UpdateHarvest.html", **data)
+    elif request.method == "POST":
+        locationId = int(request.form['locationId'])
+        locationHandler.updateHarvest(H_Id, "L_Id", locationId)
+        FC_Id = int(request.form['FC_Id'])
+        locationHandler.updateHarvest(H_Id, "FC_Id", FC_Id)
+        date = request.form['date']
+        locationHandler.updateHarvest(H_Id, "Date", date)
+        catty = int(request.form['catty'])
+        locationHandler.updateHarvest(H_Id, "Catty", catty)
+        pack_cost = int(request.form['pack_cost'])
+        locationHandler.updateHarvest(H_Id, "Pack_Cost", pack_cost)
+        return redirect(url_for('harvest')) 
+
+#####---------------------------------delete-----------------------------------
+@app.route('/Operation/Harvest/DeleteHarvest/<int:H_Id>', methods=["GET", "POST"])
+def deleteHarvest(H_Id):
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "DeleteHarvest",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "H_Id": H_Id,
+                }
+        return render_template("DeleteHarvest.html", **data)
+    elif request.method == "POST":
+        if request.form['choose'] == 'yes':
+            locationHandler.deleteHarvest(H_Id)
+        return redirect(url_for('harvest'))        
 
 #------------------------------------Sale--------------------------------------
 @app.route('/Operation/Sale', methods=["GET", "POST"])
@@ -353,6 +402,57 @@ def addSale():
         cost = int(request.form['cost'])
         locationHandler.insertTransport(account.accountId , FC_Id, customerId, date, catty, income, cost)
         return redirect(url_for('sale')) 
+        
+#####-------------------------------update--------------------------------------
+@app.route('/Operation/Sale/UpdateSale/<int:T_Id>', methods=["GET", "POST"])
+def updateSale(T_Id):    
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        customerList = locationHandler.selectAllCustomer()
+        FCList = locationHandler.selectAllFC()
+        sale = locationHandler.getTransportById(account.accountId, T_Id)
+        data = {"title": "UpdateHarvest",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "sale": sale,
+                "FCList": FCList,
+                "customerList": customerList,
+                }
+        return render_template("UpdateSale.html", **data)
+    elif request.method == "POST":
+        customerId = int(request.form['customerId'])
+        locationHandler.updateTransport(T_Id, "C_Id", customerId)
+        FC_Id = int(request.form['FC_Id'])
+        locationHandler.updateTransport(T_Id, "FC_Id", FC_Id)
+        date = request.form['date']
+        locationHandler.updateTransport(T_Id, "Date", date)
+        catty = int(request.form['catty'])
+        locationHandler.updateTransport(T_Id, "Catty", catty)
+        income = int(request.form['income'])
+        locationHandler.updateTransport(T_Id, "Income", income)
+        cost = int(request.form['cost'])
+        locationHandler.updateTransport(T_Id, "Cost", cost)
+        return redirect(url_for('sale'))
+
+#####---------------------------------delete-----------------------------------
+@app.route('/Operation/Sale/DeleteSale/<int:T_Id>', methods=["GET", "POST"])
+def deleteSale(T_Id):
+    account = accountHandler.getAccountDataBySessionId(
+                request.cookies.get('sessionId'))
+    if request.method == "GET":
+        data = {"title": "DeleteSale",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "T_Id": T_Id,
+                }
+        return render_template("DeleteSale.html", **data)
+    elif request.method == "POST":
+        if request.form['choose'] == 'yes':
+            locationHandler.deleteTransport(T_Id)
+        return redirect(url_for('sale'))                
 
 #------------------------------------FC----------------------------------------
 @app.route('/View/FruitCrop')

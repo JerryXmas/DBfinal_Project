@@ -1,0 +1,36 @@
+{% extends "head.html" %}
+  
+  {% block content %}
+    <div class="container">
+      <div class="jumbotron">
+       <h2>Update Harvest : </h2>
+        <form class="form-inline" action="{{ url_for('updateHarvest', H_Id = harvest.Id) }}" method="POST">
+          Harvest
+          <select class="form-control" name="FC_Id">
+              {% for fc in FCList %}
+              <option value="{{ fc.FC_Id }}" {% if fc.FC_Id == harvest.FC.FC_Id %}selected{% endif %}>{{ fc.name }}</option>
+              {% endfor %}
+          </select>
+          From
+          <select class="form-control" name="locationId">
+              {% for location in locations %}
+              <option value="{{ location.id }}" {% if location.id == harvest.location.id %}selected{% endif %}>{{ location.name }}</option>
+              {% endfor %}
+          </select>
+          <br />
+          <br />
+          Date :
+          <input class="form-control" type="date" name="date" value="{{ harvest.date }}" />
+          <br />
+          TGs :
+          <input class="form-control" type="text" name="catty" value="{{ harvest.catty }}" />
+          <br />
+          Pack Cost ($) :
+          <input class="form-control" type="text" name="pack_cost" value="{{ harvest.pack_cost }}" />
+          <br />
+          <br />
+          <input class="btn btn-default" type="submit"/>
+        </form>
+      </div>
+    </div> 
+  {% endblock content %}

@@ -31,7 +31,7 @@
 	      	  <td>{{ transport.catty }} TGs</td>
 	      	  <td>{{ transport.income }} $</td>
 	      	  <td>{{ transport.cost }} $</td>
-	      	  <td></td>
+	      	  <td><a href="{{ url_for('updateSale', T_Id = transport.id) }}">Update Sale</a><br /><a href="{{ url_for('deleteSale', T_Id = transport.id) }}">Delete Sale</a></td>
 	      	</tr>
 	      	{% endfor %}
         </table>
