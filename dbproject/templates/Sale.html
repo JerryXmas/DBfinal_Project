@@ -6,6 +6,13 @@
         <h2>Sale :</h2>
         <a href="{{ url_for('addSale') }}">Add Sale</a>
         <hr />
+        <form class="form-inline" action="{{ url_for('sale') }}" method="POST">
+        	<input class="form-control" type="date" name="sdate" value="{{ sdate }}" /> ~ 
+        	<input class="form-control" type="date" name="ddate" value="{{ ddate }}" />
+        	<input class="btn btn-default" type="submit"/>
+        </form>
+        <hr />
+        <h4>All Data :</h4>
         <table class='table table-striped'>
         	<tr>
 	          <th>FruitCrop</th>
@@ -27,6 +34,33 @@
 	      	  <td></td>
 	      	</tr>
 	      	{% endfor %}
+        </table>
+        <hr />
+        <h4>Sum Data :</h4>
+        <table class='table table-striped'>
+        <tr>
+        	<th>FruitCrop</th>
+        	<th>Sum TGs</th>
+        	<th>Sum Income</th>
+        	<th>Sum Transport Cost</th>
+        	<th>Profit</th>
+        </tr>
+        {% for sum in sumData %}
+        <tr>
+        	<td>{{ sum[0] }}</td>
+        	<td>{{ sum[1] }}</td>
+        	<td>{{ sum[2] }}</td>
+        	<td>{{ sum[3] }}</td>
+        	<td></td>
+        </tr>
+        {% endfor %}
+        <tr class="warning">
+        	<td></td>
+        	<td></td>
+        	<td>{{ sumIncome }}</td>
+        	<td>{{ sumCost }}</td>
+        	<td>{{ sumIncome - sumCost }}</td>
+        </tr>
         </table>
       </div>
     </div> 

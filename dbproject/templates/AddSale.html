@@ -6,17 +6,18 @@
        <h2>Add Sale : </h2>
         <form class="form-inline" action="{{ url_for('addSale') }}" method="POST">
           Sale
-          <select name="FC_Id">
+          <select class="form-control" name="FC_Id">
               {% for fc in FCList %}
               <option value="{{ fc.FC_Id }}">{{ fc.name }}</option>
               {% endfor %}
           </select>
           To
-          <select name="customerId">
+          <select class="form-control" name="customerId">
               {% for customer in customerList %}
               <option value="{{ customer.id }}">{{ customer.name }}</option>
               {% endfor %}
           </select>
+          <br />
           <br />
           Date :
           <input class="form-control" type="date" name="date" />
@@ -29,6 +30,7 @@
           <br />
           Transport Cost ($) :
           <input class="form-control" type="text" name="cost" />
+          <br />
           <br />
           <input class="btn btn-default" type="submit"/>
         </form>

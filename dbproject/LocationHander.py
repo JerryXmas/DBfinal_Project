@@ -85,14 +85,21 @@ class LocationHander(object):
                 location = l
         return location
         
-    def selectAllGrow(self, accountId):
+    def selectAllGrow(self, accountId, date=None):
         conn = sqlite3.connect(self.dbName)
         growCursor = conn.cursor()
-        growData = growCursor.execute(
-                           ("select * from Grow, FruitCrop, Location, Account "
-                            "where (Grow.FC_Id) = FruitCrop.Id and Grow.L_Id = Location.Id "
-                            "and Location.AccountId = Account.Id and AccountId = %d order by Grow.Date DESC;") % accountId
-                       ).fetchall()
+        if not date:
+            growData = growCursor.execute(
+                               ("select * from Grow, FruitCrop, Location, Account "
+                                "where (Grow.FC_Id) = FruitCrop.Id and Grow.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d order by Grow.Date DESC;") % accountId
+                           ).fetchall()
+        else:
+            growData = growCursor.execute(
+                               ("select * from Grow, FruitCrop, Location, Account "
+                                "where (Grow.FC_Id) = FruitCrop.Id and Grow.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d and Grow.Date > '%s' and Grow.Date < '%s' order by Grow.Date DESC;") % (accountId, date[0], date[1])
+                           ).fetchall()
         
         growList = []
         for g in growData:
@@ -129,14 +136,21 @@ class LocationHander(object):
         growCursor.close()
         conn.close()
         
-    def selectAllHarvest(self, accountId):
+    def selectAllHarvest(self, accountId, date=None):
         conn = sqlite3.connect(self.dbName)
         harvestCursor = conn.cursor()
-        harvestData = harvestCursor.execute(
-                           ("select * from Harvest, FruitCrop, Location, Account "
-                            "where (Harvest.FC_Id) = FruitCrop.Id and Harvest.L_Id = Location.Id "
-                            "and Location.AccountId = Account.Id and AccountId = %d order by Harvest.Date DESC;") % accountId
-                       ).fetchall()
+        if not date:
+            harvestData = harvestCursor.execute(
+                               ("select * from Harvest, FruitCrop, Location, Account "
+                                "where (Harvest.FC_Id) = FruitCrop.Id and Harvest.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d order by Harvest.Date DESC;") % accountId
+                           ).fetchall()
+        else:
+            harvestData = harvestCursor.execute(
+                               ("select * from Harvest, FruitCrop, Location, Account "
+                                "where (Harvest.FC_Id) = FruitCrop.Id and Harvest.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d and Harvest.Date > '%s' and Harvest.Date < '%s' order by Harvest.Date DESC;") % (accountId, date[0], date[1])
+                           ).fetchall()
         harvestList = [] 
         for h in harvestData:
             location = self.getLocationById(h[15], h[1])
@@ -159,14 +173,21 @@ class LocationHander(object):
         harvestCursor.close()
         conn.close()
         
-    def selectAllTransport(self, accountId):
+    def selectAllTransport(self, accountId, date=None):
         conn = sqlite3.connect(self.dbName)
         transportCursor = conn.cursor()
-        transportData = transportCursor.execute(
-                            ("select * from Transport, FruitCrop, Account, Customer "
-                             "where Transport.A_Id = Account.Id and Transport.FC_Id = FruitCrop.Id "
-                             "and Transport.C_Id = Customer.Id and Transport.A_Id = %d") % accountId
-                        ).fetchall()
+        if not date:
+            transportData = transportCursor.execute(
+                                ("select * from Transport, FruitCrop, Account, Customer "
+                                 "where Transport.A_Id = Account.Id and Transport.FC_Id = FruitCrop.Id "
+                                 "and Transport.C_Id = Customer.Id and Transport.A_Id = %d order by Transport.Date DESC;") % accountId
+                            ).fetchall()
+        else:
+            transportData = transportCursor.execute(
+                                ("select * from Transport, FruitCrop, Account, Customer "
+                                 "where Transport.A_Id = Account.Id and Transport.FC_Id = FruitCrop.Id "
+                                 "and Transport.C_Id = Customer.Id and Transport.A_Id = %d and Transport.Date > '%s' and Transport.Date < '%s' order by Transport.Date DESC;") % (accountId, date[0], date[1])
+                            ).fetchall()
         transportList = []
         for t in transportData:
             FC = FruitCrop(t[8], t[9], t[10], t[11])
@@ -278,4 +299,43 @@ class LocationHander(object):
         customerCursor.close()
         conn.close()
         
+    def sumHarvest(self, accountId, date=None):
+        conn = sqlite3.connect(self.dbName)
+        harvestCursor = conn.cursor()
+        if not date:
+            sumData = harvestCursor.execute(
+                               ("select FruitCrop.Name, sum(Harvest.Catty), sum(Harvest.Pack_Cost) from Harvest, FruitCrop, Location, Account "
+                                "where (Harvest.FC_Id) = FruitCrop.Id and Harvest.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d group by Harvest.FC_Id order by Harvest.Date DESC;") % accountId
+                           ).fetchall()
+        else:
+            sumData = harvestCursor.execute(
+                               ("select FruitCrop.Name, sum(Harvest.Catty), sum(Harvest.Pack_Cost) from Harvest, FruitCrop, Location, Account "
+                                "where (Harvest.FC_Id) = FruitCrop.Id and Harvest.L_Id = Location.Id "
+                                "and Location.AccountId = Account.Id and AccountId = %d and Harvest.Date > '%s' and Harvest.Date < '%s' group by Harvest.FC_Id order by Harvest.Date DESC;") % (accountId, date[0], date[1])
+                           ).fetchall()
+        print sumData
+        harvestCursor.close()
+        conn.close()
+        return sumData
         
+    def sumTransport(self, accountId, date=None):
+        conn = sqlite3.connect(self.dbName)
+        transportCursor = conn.cursor()
+        if not date:
+            sumData = transportCursor.execute(
+                                ("select FruitCrop.Name, sum(Transport.Catty), sum(Transport.Income), sum(Transport.Cost) from Transport, FruitCrop, Account, Customer "
+                                 "where Transport.A_Id = Account.Id and Transport.FC_Id = FruitCrop.Id "
+                                 "and Transport.C_Id = Customer.Id and Transport.A_Id = %d group by Transport.FC_Id order by Transport.Date DESC;") % accountId
+                            ).fetchall()
+        else:
+            sumData = transportCursor.execute(
+                                ("select FruitCrop.Name, sum(Transport.Catty), sum(Transport.Income), sum(Transport.Cost) from Transport, FruitCrop, Account, Customer "
+                                 "where Transport.A_Id = Account.Id and Transport.FC_Id = FruitCrop.Id "
+                                 "and Transport.C_Id = Customer.Id and Transport.A_Id = %d and Transport.Date > '%s' and Transport.Date < '%s' group by Transport.FC_Id order by Transport.Date DESC;") % (accountId, date[0], date[1])
+                            ).fetchall()
+        print sumData
+        
+        transportCursor.close()
+        conn.close()
+        return sumData

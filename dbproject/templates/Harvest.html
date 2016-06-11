@@ -6,6 +6,13 @@
         <h2>Harvest :</h2>
         <a href="{{ url_for('addHarvest') }}">Add Harvest</a>
         <hr />
+        <form class="form-inline" action="{{ url_for('harvest') }}" method="POST">
+        	<input class="form-control" type="date" name="sdate" value="{{ sdate }}" /> ~ 
+        	<input class="form-control" type="date" name="ddate" value="{{ ddate }}" />
+        	<input class="btn btn-default" type="submit"/>
+        </form>
+        <hr />
+        <h4>All Data :</h4>
         <table class='table table-striped'>
         	<tr>
 	          <th>FruitCrop</th>
@@ -25,6 +32,27 @@
 	      	  <td></td>
 	      	</tr>
 	      	{% endfor %}
+        </table>
+        <hr />
+        <h4>Sum Data :</h4>
+        <table class='table table-striped'>
+        <tr>
+        	<th>FruitCrop</th>
+        	<th>Sum TGs</th>
+        	<th>Sum Pack Cost</th>
+        </tr>
+        {% for sum in sumData %}
+        <tr>
+        	<td>{{ sum[0] }}</td>
+        	<td>{{ sum[1] }}</td>
+        	<td>{{ sum[2] }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="warning">
+        	<td></td>
+        	<td></td>
+        	<td>{{ sumP_Cost }}</td>
+        </tr>
         </table>
       </div>
     </div> 

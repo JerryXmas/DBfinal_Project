@@ -6,6 +6,12 @@
         <h2>Grow :</h2>
         <a href="{{ url_for('addGrow') }}">Add Grow</a>
         <hr />
+        <form class="form-inline" action="{{ url_for('grow') }}" method="POST">
+        	<input class="form-control" type="date" name="sdate" value="{{ sdate }}" /> ~ 
+        	<input class="form-control" type="date" name="ddate" value="{{ ddate }}" />
+        	<input class="btn btn-default" type="submit"/>
+        </form>
+        <br />
         <table class='table table-striped'>
         	<tr>
 	          <th>FruitCrop</th>

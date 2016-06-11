@@ -162,22 +162,36 @@ def deleteLocation(locationId):
         return redirect(url_for('location'))
         
 #---------------------------------Grow-----------------------------------------
-@app.route('/Operation/Grow')
+@app.route('/Operation/Grow', methods=["GET", "POST"])
 def grow():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
-    growList = locationHandler.selectAllGrow(account.accountId)
-                
-    
-    data = {"title": "Grow",
-            "Operation": active,
-            "hasLogIn": True,
-            "userName": "Hello " + account.userName,
-            "growList": growList,
-            "locationHandler": locationHandler,
-            "accountId": account.accountId
-            }
-    return render_template("Grow.html", **data)
+    if request.method == "GET":
+        growList = locationHandler.selectAllGrow(account.accountId)
+        data = {"title": "Grow",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "growList": growList,
+                "locationHandler": locationHandler,
+                "accountId": account.accountId
+                }
+        return render_template("Grow.html", **data)
+    elif request.method == "POST":
+        sdate = request.form['sdate']
+        ddate = request.form['ddate']
+        growList = locationHandler.selectAllGrow(account.accountId, date=(sdate, ddate))
+        data = {"title": "Grow",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "growList": growList,
+                "locationHandler": locationHandler,
+                "accountId": account.accountId,
+                "sdate": sdate,
+                "ddate": ddate,
+                }
+        return render_template("Grow.html", **data)
     
 #####------------------------------add------------------------------------------
 @app.route('/Operation/Grow/AddGrow', methods=["GET", "POST"])
@@ -204,18 +218,44 @@ def addGrow():
         return redirect(url_for('grow'))
         
 #----------------------------------Harvest-------------------------------------
-@app.route('/Operation/Harvest')
+@app.route('/Operation/Harvest', methods=["GET", "POST"])
 def harvest():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
-    harvestList = locationHandler.selectAllHarvest(account.accountId)
-    data = {"title": "Harvest",
-            "Operation": active,
-            "hasLogIn": True,
-            "userName": "Hello " + account.userName,
-            "harvestList": harvestList,
-            }
-    return render_template("Harvest.html", **data)
+    if request.method == "GET":
+        harvestList = locationHandler.selectAllHarvest(account.accountId)
+        sumData = locationHandler.sumHarvest(account.accountId)
+        sumP_Cost = 0
+        for s in sumData:
+            sumP_Cost += s[2]
+        data = {"title": "Harvest",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "harvestList": harvestList,
+                "sumData": sumData,
+                "sumP_Cost": sumP_Cost,
+                }
+        return render_template("Harvest.html", **data)
+    elif request.method == "POST":
+        sdate = request.form['sdate']
+        ddate = request.form['ddate']
+        harvestList = locationHandler.selectAllHarvest(account.accountId,  date=(sdate, ddate))
+        sumData = locationHandler.sumHarvest(account.accountId, date=(sdate, ddate))
+        sumP_Cost = 0
+        for s in sumData:
+            sumP_Cost += s[2]
+        data = {"title": "Harvest",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "harvestList": harvestList,
+                "sdate": sdate,
+                "ddate": ddate,
+                "sumData": sumData,
+                "sumP_Cost": sumP_Cost,
+                }
+        return render_template("Harvest.html", **data)
     
 #####--------------------------------add---------------------------------------
 @app.route('/Operation/Harvest/AddHarvest', methods=["GET", "POST"])
@@ -243,18 +283,50 @@ def addHarvest():
         return redirect(url_for('harvest'))  
 
 #------------------------------------Sale--------------------------------------
-@app.route('/Operation/Sale')
+@app.route('/Operation/Sale', methods=["GET", "POST"])
 def sale():
     account = accountHandler.getAccountDataBySessionId(
                 request.cookies.get('sessionId'))
-    transportList = locationHandler.selectAllTransport(account.accountId)
-    data = {"title": "Sale",
-            "Operation": active,
-            "hasLogIn": True,
-            "userName": "Hello " + account.userName,
-            "transportList": transportList,
-            }
-    return render_template("Sale.html", **data) 
+    if request.method == "GET":
+        transportList = locationHandler.selectAllTransport(account.accountId)
+        sumData = locationHandler.sumTransport(account.accountId)
+        sumIncome = 0
+        sumCost = 0
+        for s in sumData:
+            sumIncome += s[2]
+            sumCost += s[3]
+        data = {"title": "Sale",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "transportList": transportList,
+                "sumData": sumData,
+                "sumIncome": sumIncome,
+                "sumCost": sumCost,
+                }
+        return render_template("Sale.html", **data) 
+    elif request.method == "POST":
+        sdate = request.form['sdate']
+        ddate = request.form['ddate']
+        transportList = locationHandler.selectAllTransport(account.accountId, date=(sdate, ddate))
+        sumData = locationHandler.sumTransport(account.accountId, date=(sdate, ddate))
+        sumIncome = 0
+        sumCost = 0
+        for s in sumData:
+            sumIncome += s[2]
+            sumCost += s[3]
+        data = {"title": "Sale",
+                "Operation": active,
+                "hasLogIn": True,
+                "userName": "Hello " + account.userName,
+                "transportList": transportList,
+                "sdate": sdate,
+                "ddate": ddate,
+                "sumData": sumData,
+                "sumIncome": sumIncome,
+                "sumCost": sumCost,
+                }
+        return render_template("Sale.html", **data)
 
 #####---------------------------------add--------------------------------------
 @app.route('/Operation/Sale/AddSale', methods=["GET", "POST"])
